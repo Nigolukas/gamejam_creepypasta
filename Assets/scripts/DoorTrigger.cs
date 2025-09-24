@@ -33,7 +33,12 @@ public class DoubleSlidingDoor : MonoBehaviour
 
     void Update()
     {
-        if (player == null) return;
+        /*if (player == null)
+        {
+            GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
+            if (playerObj != null)
+                player = playerObj.transform;
+        }*/
 
         // Calcula distancia desde el jugador a la puerta1
         float distance = Vector3.Distance(player.position, puerta1.position);
