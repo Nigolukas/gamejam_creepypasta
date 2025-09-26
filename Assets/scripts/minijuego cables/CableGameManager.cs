@@ -9,6 +9,7 @@ public class CableGameManager : MonoBehaviour
     public GameObject sensor;
     public GameObject player;
     public GameObject particulas;
+    public InteractableObject interactableObject;
 
     private List<LineRenderer> activeLines = new List<LineRenderer>();
 
@@ -65,6 +66,7 @@ public class CableGameManager : MonoBehaviour
             player.SetActive(true);
             sensor.SetActive(true);
             particulas.SetActive(false);
+            interactableObject.TryInteract();
         }
     }
 

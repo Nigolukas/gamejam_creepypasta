@@ -45,7 +45,8 @@ public class InteractableObject : MonoBehaviour
 
         // Activar solo la cámara del jugador al inicio
         playerCamera.enabled = true;
-        fixedCamera.enabled = false;
+        if (fixedCamera != null)
+            fixedCamera.enabled = false;
 
         if (interactionUI != null) interactionUI.SetActive(false);
         if (exitUI != null) exitUI.SetActive(false);
@@ -67,7 +68,7 @@ public class InteractableObject : MonoBehaviour
             interactionUI.SetActive(isNear && !isUsingFixedCamera);
     }
 
-    void TryInteract()
+    public void TryInteract()
     {
         if (isNear || isUsingFixedCamera) // Permite salir aunque no estés cerca
         {
@@ -77,10 +78,15 @@ public class InteractableObject : MonoBehaviour
 
     void ToggleCamera()
     {
+        
         isUsingFixedCamera = !isUsingFixedCamera;
 
-        playerCamera.enabled = !isUsingFixedCamera;
-        fixedCamera.enabled = isUsingFixedCamera;
+        if (fixedCamera != null)
+        {
+            playerCamera.enabled = !isUsingFixedCamera;
+            fixedCamera.enabled = isUsingFixedCamera;
+        }
+        
 
         // Mostrar/ocultar UI
         if (interactionUI != null) interactionUI.SetActive(!isUsingFixedCamera && isNear);
@@ -88,7 +94,6 @@ public class InteractableObject : MonoBehaviour
 
         // Mostrar/ocultar cápsula del jugador y cursor
         if (playerCapsule != null) playerCapsule.SetActive(!isUsingFixedCamera);
-
         if (isUsingFixedCamera)
         {
             Cursor.visible = true;
@@ -99,5 +104,6 @@ public class InteractableObject : MonoBehaviour
             Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Locked;
         }
+        
     }
 }
