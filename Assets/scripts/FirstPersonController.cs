@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.InputSystem; // Necesario para el nuevo Input System
 
 [RequireComponent(typeof(CharacterController))]
@@ -9,7 +9,7 @@ public class FirstPersonControllerNew : MonoBehaviour
     public float gravity = -9.81f;
     public float jumpHeight = 1.5f;
 
-    [Header("C�mara")]
+    [Header("Cámara")]
     public Transform playerCamera;
     public float mouseSensitivity = 100f;
     public float verticalLookLimit = 80f;
@@ -22,6 +22,15 @@ public class FirstPersonControllerNew : MonoBehaviour
     private Vector2 moveInput;
     private Vector2 lookInput;
     private bool jumpPressed;
+    private bool movementLocked = false;
+    private bool cameraLocked = false;
+    public void LockMovement() => movementLocked = true;
+    public void UnlockMovement() => movementLocked = false;
+
+    public void LockCamera() => cameraLocked = true;
+    public void UnlockCamera() => cameraLocked = false;
+    // 🔥 NUEVO: control de bloqueo de cámara
+    
 
     void Awake()
     {
@@ -49,11 +58,14 @@ public class FirstPersonControllerNew : MonoBehaviour
     void Update()
     {
         Movimiento();
-        Camara();
+
+        if (!cameraLocked) // 🔥 Solo mueve la cámara si no está bloqueada
+            Camara();
     }
 
     void Movimiento()
     {
+        if (movementLocked) return; // si está bloqueado no hace nada
         Vector3 move = transform.right * moveInput.x + transform.forward * moveInput.y;
         controller.Move(move * speed * Time.deltaTime);
 
@@ -70,8 +82,11 @@ public class FirstPersonControllerNew : MonoBehaviour
         controller.Move(velocity * Time.deltaTime);
     }
 
+
     void Camara()
     {
+        if (cameraLocked) return; //  No mover cámara si está bloqueada
+
         float mouseX = lookInput.x * mouseSensitivity * Time.deltaTime;
         float mouseY = lookInput.y * mouseSensitivity * Time.deltaTime;
 
@@ -81,4 +96,5 @@ public class FirstPersonControllerNew : MonoBehaviour
         playerCamera.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
         transform.Rotate(Vector3.up * mouseX);
     }
+
 }

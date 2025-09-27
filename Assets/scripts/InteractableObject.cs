@@ -14,6 +14,7 @@ public class InteractableObject : MonoBehaviour
     [Header("Interacción")]
     public float interactionDistance = 3f;
     public GameObject playerCapsule;
+    public bool interactuable = true;
 
     private Transform player;
     private bool isUsingFixedCamera = false;
@@ -57,23 +58,31 @@ public class InteractableObject : MonoBehaviour
 
     void Update()
     {
-        if (player == null) return;
+        
 
         // Verificar si el jugador está cerca del objeto
         float distance = Vector3.Distance(player.position, transform.position);
         isNear = distance <= interactionDistance;
 
         // Mostrar/ocultar el letrero de interacción (solo si no estamos en cámara fija)
-        if (interactionUI != null)
-            interactionUI.SetActive(isNear && !isUsingFixedCamera);
+        if(interactuable == true)
+        {
+            if (interactionUI != null)
+                interactionUI.SetActive(isNear && !isUsingFixedCamera);
+        }
+
     }
 
     public void TryInteract()
     {
-        if (isNear || isUsingFixedCamera) // Permite salir aunque no estés cerca
+        if (interactuable == true)
         {
-            ToggleCamera();
+            if (isNear || isUsingFixedCamera) // Permite salir aunque no estés cerca
+            {
+                ToggleCamera();
+            }
         }
+
     }
 
     void ToggleCamera()
@@ -104,6 +113,10 @@ public class InteractableObject : MonoBehaviour
             Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Locked;
         }
-        
+        if (interactuable == false)
+        {
+            interactionUI.SetActive(false);
+        }
+
     }
 }

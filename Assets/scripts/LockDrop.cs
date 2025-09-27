@@ -8,6 +8,9 @@ public class LockDrop : MonoBehaviour, IDropHandler
     public InteractableObject interactableObject = null;
     public GameObject puertasAbiertas;
     public GameObject puertasCerradas;
+    public GameObject minijuegoUI;
+    public GameObject InicioUI;
+    public GameObject UIOcultar;
     private RectTransform rectTransform;
 
     private void Awake()
@@ -45,6 +48,13 @@ public class LockDrop : MonoBehaviour, IDropHandler
             yield return null;
         }
         interactableObject.TryInteract();
+        interactableObject.interactuable = false;
+        puertasAbiertas.SetActive(false);
+        puertasCerradas.SetActive(true);
+        InicioUI.SetActive(true);
+        minijuegoUI.SetActive(false);
+        UIOcultar.SetActive(false);
+        rectTransform.rotation = startRot;
     }
 
     private IEnumerator Wobble()
